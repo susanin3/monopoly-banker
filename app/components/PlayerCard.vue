@@ -65,7 +65,7 @@ import type { Player } from '~/utils/types/player'
 
 const { open: openPaymentTerminal } = usePaymentTerminal()
 
-const { updatePlayer } = usePlayers()
+const playersStore = usePlayersStore()
 
 const props = defineProps({
   player: {
@@ -75,12 +75,11 @@ const props = defineProps({
 })
 
 const openPT = () => {
-  console.log(props.player)
   openPaymentTerminal(false, props.player)
 }
 
 const bankrupt = () => {
-  updatePlayer(props.player, { isBankrupt: true })
+  playersStore.updatePlayer(props.player, { isBankrupt: true })
 }
 </script>
 

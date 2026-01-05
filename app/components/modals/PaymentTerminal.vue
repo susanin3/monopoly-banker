@@ -6,7 +6,7 @@
     <template #body>
       <div
         v-if="done"
-        class="m-4 flex items-center justify-center"
+        class="flex items-center justify-center"
       >
         <u-icon
           name="line-md:confirm"
@@ -15,11 +15,11 @@
       </div>
       <form
         v-else
-        class="m-4 flex flex-col gap-4"
+        class="flex flex-col gap-4"
         @submit.prevent
       >
-        <div class="flex items-center gap-4">
-          <div>
+        <div class="flex items-center">
+          <div class="w-18">
             Player:
           </div>
           <div v-if="bulk">
@@ -34,6 +34,9 @@
           />
         </div>
         <div class="flex">
+          <div class="w-18">
+            Amount:
+          </div>
           <u-input-number
             v-model="transactionValue"
             :min="0"
@@ -116,10 +119,11 @@ const transactionValuePresets = [
   { label: '2M', value: 2_000_000 }
 ] as const
 
-const { players, updatePlayer, getPlayerById } = usePlayers()
+const playersStore = usePlayersStore()
+
 const playersItems = computed<SelectItem[]>(() => {
   const res: SelectItem[] = []
-  players.value.forEach((p: Player) => res.push({
+  Object.values(playersStore.players).forEach((p: Player) => res.push({
     label: p.name,
     value: p.id
   } as SelectItem))
@@ -129,14 +133,14 @@ const playersItems = computed<SelectItem[]>(() => {
 const submit = (mul: number) => {
   const val = transactionValue.value * mul
   if (bulk.value) {
-    players.value.forEach((p) => {
-      updatePlayer(p, { balance: p.balance + val })
+    Object.values(playersStore.players).forEach((p) => {
+      playersStore.updatePlayer(p, { balance: p.balance + val })
     })
   } else {
     try {
       if (selectedPlayer.value) {
-        const p = getPlayerById(selectedPlayer.value)
-        updatePlayer(p, { balance: p.balance + val })
+        const p = playersStore.getPlayerById(selectedPlayer.value)
+        playersStore.updatePlayer(p, { balance: p.balance + val })
       }
     } catch {
       toast.add({

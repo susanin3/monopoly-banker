@@ -22,8 +22,6 @@
       class="justify-center bg-accented/30"
       @click="restart"
     />
-    <modals-payment-terminal />
-    <modals-restart-game />
     <modals-dice-throwing ref="diceRef" />
   </div>
 </template>

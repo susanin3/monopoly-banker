@@ -1,9 +1,9 @@
-import type { Player } from './types/player'
+import type { Player, Players } from './types/player'
 
 export const createPlayer = (name: string, color: string, balance: number): Player => {
   color = color || '#1073f2'
   return {
-    id: Math.random() * 10 ** 16,
+    id: Math.round(Math.random() * 10 ** 16),
     name,
     color,
     balance,
@@ -16,11 +16,11 @@ export const validatePlayer = (player: Player): boolean => {
   return Boolean(player.name && !isNaN(player.balance))
 }
 
-export const validatePlayers = (players: Player[]): boolean => {
+export const validatePlayers = (players: Players): boolean => {
   // check that the players are valid and their names are unique
   const reservedNames: string[] = []
   let valid = true
-  players.forEach((p) => {
+  Object.values(players).forEach((p) => {
     if (reservedNames.includes(p.name) || !validatePlayer(p)) {
       valid = false
     }

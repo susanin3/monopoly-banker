@@ -5,3 +5,5 @@ export interface Player {
   color: string
   isBankrupt: boolean
 }
+
+export type Players = Record<number, Player>

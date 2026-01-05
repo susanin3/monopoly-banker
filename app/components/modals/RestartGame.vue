@@ -22,10 +22,11 @@
 
 <script setup>
 const { opened } = useRestarter()
-const { setPlayers } = usePlayers()
+const playersStore = usePlayersStore()
 
 const restart = () => {
-  setPlayers([])
+  playersStore.setPlayers({})
+  close()
 }
 
 const close = () => {

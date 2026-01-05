@@ -1,22 +1,28 @@
 <template>
   <div class="flex">
+    <players-list v-if="playersStore.hasPlayers" />
     <starting-form
-      v-if="players.length === 0"
+      v-else
       @submit="startTheGame"
     />
-    <players-list v-else />
+    <modals-payment-terminal />
+    <modals-transfer-terminal />
+    <modals-restart-game />
   </div>
 </template>
 
 <script setup lang="ts">
 import PlayersList from '~/components/PlayersList.vue'
 import StartingForm from '~/components/StartingForm.vue'
-import type { Player } from '~/utils/types/player'
+import type { Player, Players } from '~/utils/types/player'
 
-const { players, setPlayers } = usePlayers()
-// const players: Ref<Player[]> = ref([])
+const playersStore = usePlayersStore()
 
-const startTheGame = (pls: Player[]) => {
-  setPlayers(pls)
+const startTheGame = (players: Player[]) => {
+  let pls: Players = {}
+  players.forEach((p: Player) => {
+    pls = { ...pls, ...{ [p.id]: p } }
+  })
+  playersStore.setPlayers(pls)
 }
 </script>

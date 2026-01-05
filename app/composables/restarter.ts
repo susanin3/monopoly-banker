@@ -1,7 +1,7 @@
 export const useRestarter = () => {
-  const opened = useState<boolean>('restart-modal-opened', () => false)
+  const { opened, open } = useModal('restart-modal')
   const askToRestart = () => {
-    opened.value = true
+    open()
   }
   return {
     opened,

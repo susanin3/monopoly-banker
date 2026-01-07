@@ -1,0 +1,21 @@
+<svg width="200" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+    <!-- Body (narrower) -->
+    <rect x="48" y="16" width="160" height="224" rx="16" fill="#1f2a33" />
+
+    <!-- Screen -->
+    <rect x="72" y="32" width="112" height="64" rx="8" fill="#4fd1c5" />
+
+    <!-- Screen slot -->
+    <rect x="88" y="72" width="80" height="10" rx="5" fill="#0f1720" />
+
+    <!-- Buttons -->
+    <g fill="#ffffff">
+        <rect x="72" y="112" width="28" height="32" rx="4" />
+        <rect x="114" y="112" width="28" height="32" rx="4" />
+        <rect x="156" y="112" width="28" height="32" rx="4" />
+
+        <rect x="72" y="160" width="28" height="32" rx="4" />
+        <rect x="114" y="160" width="28" height="32" rx="4" />
+        <rect x="156" y="160" width="28" height="32" rx="4" />
+    </g>
+</svg>

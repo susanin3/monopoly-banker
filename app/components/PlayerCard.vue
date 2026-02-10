@@ -32,6 +32,7 @@
         label="Receive"
         variant="ghost"
         class="justify-center bg-accented"
+        @click="openTT(true)"
       />
       <u-button
         color="error"
@@ -47,6 +48,7 @@
         label="Transfer"
         variant="ghost"
         class="justify-center bg-accented"
+        @click="openTT(false)"
       />
       <u-button
         color="error"
@@ -64,6 +66,7 @@
 import type { Player } from '~/utils/types/player'
 
 const { open: openPaymentTerminal } = usePaymentTerminal()
+const { open: openTransferTerminal } = useTransferTerminal()
 
 const playersStore = usePlayersStore()
 
@@ -76,6 +79,14 @@ const props = defineProps({
 
 const openPT = () => {
   openPaymentTerminal(false, props.player)
+}
+
+const openTT = (isReceiver: boolean) => {
+  if (isReceiver) {
+    openTransferTerminal(null, props.player)
+  } else {
+    openTransferTerminal(props.player, null)
+  }
 }
 
 const bankrupt = () => {

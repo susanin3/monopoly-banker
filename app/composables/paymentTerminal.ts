@@ -1,7 +1,7 @@
 import type { Player } from '~/utils/types/player'
 
 export const usePaymentTerminal = () => {
-  const { opened, open: openModal, close, toggle } = useModal('opened')
+  const { opened, open: openModal, close, toggle } = useModal('payment-terminal')
   const bulk = useState<boolean>('payment-terminal-bulk', () => false)
   const selectedPlayer = useState<number | null>('payment-terminal-selected-player', () => null)
 
@@ -14,11 +14,11 @@ export const usePaymentTerminal = () => {
   }
 
   return {
-    open,
-    close,
-    toggle,
     opened,
     bulk,
-    selectedPlayer
+    selectedPlayer,
+    open,
+    close,
+    toggle
   }
 }

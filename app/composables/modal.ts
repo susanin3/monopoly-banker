@@ -5,8 +5,14 @@ export const useModal = (key: string) => {
     opened.value = true
   }
 
-  const close = () => {
-    opened.value = false
+  const close = (delay: number = 0) => {
+    if (delay > 0) {
+      setTimeout(() => {
+        opened.value = false
+      }, delay)
+    } else {
+      opened.value = false
+    }
   }
 
   const toggle = () => {

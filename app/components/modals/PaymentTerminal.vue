@@ -4,24 +4,17 @@
     title="Payment terminal"
   >
     <template #body>
-      <div
-        v-if="done"
-        class="flex items-center justify-center"
-      >
-        <u-icon
-          name="line-md:confirm"
-          class="size-25 text-success"
-        />
-      </div>
-      <form
-        v-else
+      <done-icon ref="doneRef" />
+      <u-form
+        v-if="!doneRef?.done"
         class="flex flex-col gap-4"
         @submit.prevent
       >
-        <div class="flex items-center">
-          <div class="w-18">
-            Player:
-          </div>
+        <u-form-field
+          label="Player:"
+          orientation="horizontal"
+          class="justify-start"
+        >
           <div v-if="bulk">
             everyone
           </div>
@@ -32,39 +25,8 @@
             placeholder="Select the player"
             required
           />
-        </div>
-        <div class="flex">
-          <div class="w-18">
-            Amount:
-          </div>
-          <u-input-number
-            v-model="transactionValue"
-            :min="0"
-            :increment="false"
-            :decrement="false"
-            placeholder="Enter a value"
-            orientation="vertical"
-            required
-          />
-          <u-button
-            color="neutral"
-            icon="i-lucide-x"
-            variant="link"
-            class="justify-center"
-            @click="transactionValue = 0"
-          />
-        </div>
-        <div class="flex flex-wrap gap-1">
-          <u-button
-            v-for="preset in transactionValuePresets"
-            :key="preset.value"
-            color="neutral"
-            variant="outline"
-            class="justify-center"
-            :label="preset.label"
-            @click="transactionValue = preset.value"
-          />
-        </div>
+        </u-form-field>
+        <amount-input v-model="transactionValue" />
 
         <div class="flex gap-4">
           <u-button
@@ -86,14 +48,13 @@
             @click="submit(-1)"
           />
         </div>
-      </form>
+      </u-form>
     </template>
   </u-modal>
 </template>
 
 <script setup lang="ts">
-import type { SelectItem } from '@nuxt/ui'
-import type { Player } from '~/utils/types/player'
+import type DoneIcon from '../DoneIcon.vue'
 
 const toast = useToast()
 
@@ -104,31 +65,12 @@ const {
   selectedPlayer
 } = usePaymentTerminal()
 
-const transactionValue = ref(0)
-const done = ref(false)
-
-const transactionValuePresets = [
-  { label: '1K', value: 1_000 },
-  { label: '5K', value: 5_000 },
-  { label: '10K', value: 10_000 },
-  { label: '20K', value: 20_000 },
-  { label: '50K', value: 50_000 },
-  { label: '100K', value: 100_000 },
-  { label: '500K', value: 500_000 },
-  { label: '1M', value: 1_000_000 },
-  { label: '2M', value: 2_000_000 }
-] as const
+const { playersItems } = usePlayers()
 
 const playersStore = usePlayersStore()
 
-const playersItems = computed<SelectItem[]>(() => {
-  const res: SelectItem[] = []
-  Object.values(playersStore.players).forEach((p: Player) => res.push({
-    label: p.name,
-    value: p.id
-  } as SelectItem))
-  return res
-})
+const transactionValue = ref(0)
+const doneRef = ref<InstanceType<typeof DoneIcon> | null>(null)
 
 const submit = (mul: number) => {
   const val = transactionValue.value * mul
@@ -148,18 +90,16 @@ const submit = (mul: number) => {
       })
     }
   }
-  done.value = true
-  setTimeout(() => {
-    closePaymentTerminal()
-  }, 1000)
+  doneRef.value?.setState(true)
+  closePaymentTerminal(1000)
 }
 
 const open = () => {
-  done.value = false
+  doneRef.value?.setState(false)
 }
 
 const close = () => {
-  setTimeout(() => done.value = false, 300)
+  doneRef.value?.setState(false, 300)
 }
 
 watch(opened, () => {
@@ -169,14 +109,4 @@ watch(opened, () => {
     close()
   }
 })
-
-// watch(() => paymentTerminalSelectedPlayer.value?.id, () => {
-//   if (paymentTerminalSelectedPlayer.value) {
-//     selectedPlayer.value = paymentTerminalSelectedPlayer.value.id
-//   }
-// })
 </script>
-
-<style>
-
-</style>

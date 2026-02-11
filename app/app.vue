@@ -14,7 +14,7 @@
         <UColorModeButton />
 
         <UButton
-          to="https://github.com/susanin3"
+          to="https://github.com/susanin3/monopoly-banker"
           target="_blank"
           icon="i-simple-icons-github"
           aria-label="GitHub"

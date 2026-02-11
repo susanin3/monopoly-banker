@@ -50,7 +50,7 @@
 
     <div class="w-full flex justify-center gap-2">
       <u-button
-        v-if="players.length < 4"
+        v-if="players.length < 8"
         icon="i-lucide-plus"
         variant="link"
         color="neutral"

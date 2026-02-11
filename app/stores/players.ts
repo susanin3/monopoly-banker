@@ -15,7 +15,7 @@ export const usePlayersStore = defineStore('Players', () => {
   }
 
   const updatePlayer = (player: Player, data: Partial<Player>): Player | undefined => {
-    if (players.value[player.id]?.isBankrupt) {
+    if (players.value[player.id]?.isBankrupt && !data.isBankrupt === false) {
       return
     }
     players.value[player.id] = {

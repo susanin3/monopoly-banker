@@ -1,7 +1,7 @@
 <template>
   <div
     class="w-full bg-accented/60 rounded-md overflow-clip"
-    :class="{ disabled: player.isBankrupt }"
+    :class="{ 'opacity-40': player.isBankrupt }"
   >
     <div class="w-full flex justify-between bg-accented/60 p-1.5 px-2">
       <div class="flex items-center gap-2 font-bold">
@@ -11,7 +11,10 @@
         />
         {{ player.name }}
       </div>
-      <div class="flex items-center gap-1">
+      <div
+        class="flex items-center gap-1"
+        :class="{ 'text-error': player.balance <= 0 }"
+      >
         <u-icon name="tabler:coins" />
         {{ player.balance }}
       </div>
@@ -24,6 +27,7 @@
         label="Add"
         variant="ghost"
         class="justify-center bg-accented"
+        :disabled="player.isBankrupt"
         @click="openPT"
       />
       <u-button
@@ -32,6 +36,7 @@
         label="Receive"
         variant="ghost"
         class="justify-center bg-accented"
+        :disabled="player.isBankrupt"
         @click="openTT(true)"
       />
       <u-button
@@ -40,6 +45,7 @@
         label="Deduct"
         variant="ghost"
         class="justify-center bg-accented"
+        :disabled="player.isBankrupt"
         @click="openPT"
       />
       <u-button
@@ -48,13 +54,14 @@
         label="Transfer"
         variant="ghost"
         class="justify-center bg-accented"
+        :disabled="player.isBankrupt"
         @click="openTT(false)"
       />
       <u-button
-        color="error"
-        icon="i-lucide-skull"
-        label="Bankrupt"
-        variant="ghost"
+        :color="bankruptButtonColor"
+        :icon="bankruptButtonIcon"
+        :label="bankruptButtonText"
+        :variant="bankruptButtonVariant"
         class="justify-center col-span-2"
         @click="bankrupt"
       />
@@ -77,6 +84,11 @@ const props = defineProps({
   }
 })
 
+const bankruptButtonText = computed(() => props.player.isBankrupt ? 'Rehabilitate' : 'Bankrupt')
+const bankruptButtonVariant = computed(() => props.player.balance > 0 || props.player.isBankrupt ? 'ghost' : 'outline')
+const bankruptButtonColor = computed(() => props.player.isBankrupt ? 'success' : 'error')
+const bankruptButtonIcon = computed(() => props.player.isBankrupt ? 'i-lucide-activity' : 'i-lucide-skull')
+
 const openPT = () => {
   openPaymentTerminal(false, props.player)
 }
@@ -90,13 +102,6 @@ const openTT = (isReceiver: boolean) => {
 }
 
 const bankrupt = () => {
-  playersStore.updatePlayer(props.player, { isBankrupt: true })
+  playersStore.updatePlayer(props.player, { isBankrupt: !props.player.isBankrupt })
 }
 </script>
-
-<style scoped>
-.disabled > * {
-  opacity: 0.4;
-  pointer-events: none;
-}
-</style>
